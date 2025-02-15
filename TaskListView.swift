@@ -5,6 +5,8 @@ import SwiftUI
 /// Otherwise, it displays a list of available tasks.
 @available(iOS 17, *)
 struct TaskListView: View {
+    @State private var showingNewTaskSheet = false
+    @State private var showingInsightsSheet = false
     @State private var sortOrder: TaskSortOrder = .title
     let isArchiveView: Bool
     
@@ -63,6 +65,15 @@ struct TaskListView: View {
                         }
                     }
                 }
+            }
+            .sheet(isPresented: $showingNewTaskSheet) {
+                TaskFormView()
+                    .environmentObject(taskManager)
+            }
+            .sheet(isPresented: $showingInsightsSheet) {
+                TaskInsightsView()
+                    .environmentObject(taskManager)
+                    .presentationDetents([.height(360)])
             }
         }
     }
@@ -180,6 +191,65 @@ struct TaskCard: View {
             return "gauge.medium"
         } else {
             return "gauge.high"
+        }
+    }
+}
+
+/// TaskListMenu is a view that displays a menu of options for the task list.
+/// It allows the user to sort tasks, create new tasks, view insights and archived tasks.
+/// It is displayed in the top row of the available tasks view.
+@available(iOS 17, *)
+struct TaskListMenu: View {
+    @Binding var sortOrder: TaskSortOrder
+    @Binding var showingNewTaskSheet: Bool
+    @Binding var showingInsightsSheet: Bool
+    
+    var body: some View {
+        Menu {
+            Menu {
+                ForEach([TaskSortOrder.title, .category, .anxietyLevel], id: \.self) { option in
+                    Button {
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            sortOrder = option
+                        }
+                    } label: {
+                        HStack {
+                            Text(option.rawValue)
+                            if sortOrder == option {
+                                Image(systemName: "checkmark")
+                            }
+                        }
+                    }
+                }
+            } label: {
+                Label("Sort By", systemImage: "arrow.up.arrow.down")
+            }
+            
+            Divider()
+            
+            Button {
+                showingNewTaskSheet = true
+            } label: {
+                Label("New Task", systemImage: "plus")
+            }
+            
+            Button {
+                showingInsightsSheet = true
+            } label: {
+                Label("Insights", systemImage: "chart.xyaxis.line")
+            }
+            
+            Divider()
+            
+            NavigationLink {
+                TaskListView(isArchiveView: true)
+            } label: {
+                Label("Archived Tasks", systemImage: "archivebox")
+            }
+        } label: {
+            Image(systemName: "ellipsis.circle.fill")
+                .font(.title)
+                .foregroundColor(.accentColor)
         }
     }
 }
