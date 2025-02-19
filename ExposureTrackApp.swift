@@ -2,10 +2,13 @@ import SwiftUI
 
 @available(iOS 17, *)
 @main
-struct ExposureTrackApp: App {    
+struct ExposureTrackApp: App {
+    @StateObject private var taskManager = TaskManager()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            TaskListView(isArchiveView: false)
+                .environmentObject(taskManager)
         }
     }
 }
