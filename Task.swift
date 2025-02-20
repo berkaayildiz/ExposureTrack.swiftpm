@@ -1,7 +1,7 @@
 import Foundation
 
 /// Task is a struct that represents an ERP task.
-struct Task: Identifiable {
+struct Task: Identifiable, Codable {
     let id: UUID
     var title: String
     var category: TaskCategory
@@ -63,7 +63,7 @@ struct Task: Identifiable {
     }
 }
 
-enum TaskCategory: String, CaseIterable {
+enum TaskCategory: String, CaseIterable, Codable {
     case contamination = "Contamination"
     case checking = "Checking"
     case symmetry = "Symmetry"
@@ -71,13 +71,13 @@ enum TaskCategory: String, CaseIterable {
     case hoarding = "Hoarding"
 }
 
-enum TaskStatus: String {
+enum TaskStatus: String, Codable {
     case available = "Available"
     case ongoing = "Ongoing"
     case archived = "Archived"
 }
 
-enum TaskSortOrder: String, CaseIterable {
+enum TaskSortOrder: String, CaseIterable, Codable {
     case title = "Title"
     case category = "Category"
     case anxietyLevel = "Anxiety Level"
