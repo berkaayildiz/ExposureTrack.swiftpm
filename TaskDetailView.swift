@@ -86,7 +86,7 @@ struct TaskDetailView: View {
                                     HStack {
                                         Text("●")
                                             .font(.system(size: 8))
-                                        Text(date.formatted(date: .abbreviated, time: .shortened))
+                                        Text(date.formatted(date: .long, time: .shortened))
                                             .font(.body)
                                     }
                                 }
