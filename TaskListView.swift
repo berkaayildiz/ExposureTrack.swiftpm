@@ -149,10 +149,18 @@ struct TaskCard: View {
             // Archive
             Button {
                 withAnimation(.easeOut) {
-                    taskManager.archiveTask(task)
+                    if task.status == .archived {
+                        taskManager.unarchiveTask(task)
+                    } else {
+                        taskManager.archiveTask(task)
+                    }
                 }
             } label: {
-                Label("Archive", systemImage: "archivebox")
+                if task.status == .archived {
+                    Label("Unarchive", systemImage: "archivebox")
+                } else {
+                    Label("Archive", systemImage: "archivebox")
+                }
             }
             
             Divider()

@@ -228,6 +228,15 @@ class TaskManager: ObservableObject {
             tasks[index] = updatedTask
         }
     }
+    
+    /// Unarchives a task.
+    func unarchiveTask(_ task: Task) {
+        if let index = tasks.firstIndex(where: { $0.id == task.id }) {
+            var updatedTask = task
+            updatedTask.status = .available
+            tasks[index] = updatedTask
+        }
+    }
 }
 
 extension TaskManager {
